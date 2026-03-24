@@ -1,0 +1,8 @@
+Gemini multimodals Exception: sequence item 0: expected str instance, dict found
+
+Traceback:
+Traceback (most recent call last):
+  File "C:\Users\Archisha Majumdar\Downloads\b_swasthya ai twin\backend\app\services\ocr_service.py", line 94, in extract_prescription
+    parsed['instructions'] += "\n\n[UNCLEAR/UNCERTAIN ITEMS]: " + ", ".join(parsed.get('unclear', []))
+                                                                  ~~~~~~~~~^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: sequence item 0: expected str instance, dict found

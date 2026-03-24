@@ -1,0 +1,61 @@
+{
+  "users": [
+    {
+      "email": "debugging@test.com",
+      "full_name": "Debug User",
+      "age": 30,
+      "gender": "Male",
+      "hashed_password": "$2b$12$TCdlc8.l5zT7SDZ8jPzEPeLj1fzXld/esVA1rAcjJg2QK/WXm887G",
+      "created_at": "2026-03-24 01:14:35.109494",
+      "health_history": [],
+      "medicines": [],
+      "reports": [],
+      "predictions": [],
+      "_id": "be888ff4-a018-4d70-997e-c01e54bb0e87"
+    },
+    {
+      "email": "archishamj16@gmail.com",
+      "full_name": "Archisha",
+      "age": 25,
+      "gender": "Female",
+      "hashed_password": "$2b$12$VgKVKLaT/PuhssHcjUCxf..WfP6HR1dfM2knyWcQC3MQMxW4npPZq",
+      "created_at": "2026-03-24 01:15:23.483186",
+      "health_history": [
+        "Asthma",
+        "Joint Pain",
+        "Drug Allergy",
+        "Unknown Prediction (2026-03-24)",
+        "Unknown Prediction (2026-03-24)",
+        "Unknown Prediction (2026-03-24)"
+      ],
+      "medicines": [],
+      "reports": [],
+      "predictions": [],
+      "_id": "7aa0c970-f2c8-45cd-af01-d795586992e0"
+    },
+    {
+      "email": "testrunner007@gmail.com",
+      "full_name": "Test Runner",
+      "age": 25,
+      "gender": "Male",
+      "hashed_password": "$2b$12$7BtWroJR4QZc8OFA8aNZd.pSBrvCCOniSHUguQCZfWjlSjSL.i3UW",
+      "created_at": "2026-03-24 01:57:29.156290",
+      "health_history": [],
+      "medicines": [],
+      "reports": [],
+      "predictions": [],
+      "_id": "0d9f7026-e558-4fe9-a453-e15a21a73af0"
+    }
+  ],
+  "daily_stats": [
+    {
+      "user_email": "archishamj16@gmail.com",
+      "date": "2026-03-24",
+      "water_ml": 0,
+      "steps": 0,
+      "calories_burnt": 0,
+      "food_log": [],
+      "_id": "cb3fe148-052a-4f66-a494-45ddfbfa85cf"
+    }
+  ]
+}
