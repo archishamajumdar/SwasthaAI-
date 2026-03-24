@@ -15,3 +15,13 @@ next.user-config.*
 node_modules/
 .next/
 .DS_Store
+
+# Python virtual environment and cache
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.env
+*.log
+*.txt
+*.png
