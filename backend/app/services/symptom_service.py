@@ -14,7 +14,6 @@ class SymptomAnalyzer:
             "respiratory": {
                 "symptoms": ["fever", "cough", "sore throat", "shortness of breath", "loss of taste", "loss of smell", "sneezing", "runny nose", "wheezing", "chest tightness", "phlegm", "blood in sputum"],
                 "conditions": [
-                    {"name": "Common Cold", "prob": "likely", "triggers": ["sneezing", "runny nose"]},
                     {"name": "Allergies", "prob": "possible", "triggers": ["sneezing", "itchy eyes"]},
                     {"name": "COVID-19", "prob": "less likely", "triggers": ["loss of taste", "loss of smell", "high fever"]},
                     {"name": "Influenza (Flu)", "prob": "likely", "triggers": ["body ache", "high fever"]},
@@ -87,7 +86,56 @@ class SymptomAnalyzer:
             }
         }
         
+        # Initialize Gemini Model for AI Symptom Analysis
+        self.gemini_model = None
+        if settings.GEMINI_API_KEY:
+            try:
+                genai.configure(api_key=settings.GEMINI_API_KEY)
+                self.gemini_model = genai.GenerativeModel('gemini-2.5-flash')
+            except Exception as e:
+                print(f"Failed to initialize Gemini in SymptomAnalyzer: {e}")
+                
     async def analyze(self, symptoms: str, age: int = 25, gender: str = "Not Specified") -> Dict:
+        if hasattr(self, 'gemini_model') and self.gemini_model:
+            try:
+                prompt = f"""
+                You are an expert medical AI specializing in Disease Prediction and Urgency assessments.
+                Analyze the following symptoms for a {age} year old {gender} patient:
+                Symptoms: {symptoms}
+                
+                Task:
+                1. Predict up to 3 possible conditions with probability (e.g., "high risk", "likely", "possible", "less likely") and numeric score (0 to 1). DO NOT guess generic "Common Cold" unless fully compliant; provide clinical predictions accurately.
+                2. Determine urgency level with a color tag: "🟢 Low", "🟡 Medium", "🟠 High", "🔴 Emergency".
+                3. Suggest brief advice/Next steps based on urgency.
+                4. Set `is_emergency` to true if symptoms are life-threatening (chest pain, breathing issues, severe bleeding, unconsciousness).
+                
+                Return ONLY a JSON object with this exact structure:
+                {{
+                  "predicted_diseases": [
+                    {{"disease": "Name of Condition", "probability": 0.85, "prob_text": "likely"}}
+                  ],
+                  "urgency_level": "🟢 Low / 🟡 Medium / 🟠 High / 🔴 Emergency",
+                  "advice": "Rest and hydrate. Consult a GP if persistent.",
+                  "is_emergency": false
+                }}
+                """
+                response = self.gemini_model.generate_content(
+                    prompt,
+                    generation_config={"response_mime_type": "application/json"}
+                )
+                import json
+                parsed = json.loads(response.text)
+                # Ensure urgency colors are properly mapped or available
+                if parsed.get('urgency_level') and '🟢' not in parsed['urgency_level'] and '🟠' not in parsed['urgency_level'] and '🔴' not in parsed['urgency_level'] and '🟡' not in parsed['urgency_level']:
+                    level = parsed['urgency_level'].lower()
+                    if 'emer' in level: parsed['urgency_level'] = '🔴 Emergency'
+                    elif 'high' in level: parsed['urgency_level'] = '🟠 High'
+                    elif 'med' in level: parsed['urgency_level'] = '🟡 Medium'
+                    else: parsed['urgency_level'] = '🟢 Low'
+                return parsed
+            except Exception as e:
+                print(f"Gemini Analyzer Error, falling back: {e}")
+
         symptoms_lower = symptoms.lower().strip()
         
         # 1. Greeting Check
